@@ -33,8 +33,9 @@ class SearchWeather extends Component {
     render() {
         return (
             <div>
-                
+
                 <form onSubmit={this.handleSubmit}>
+                    <i>Search weather here</i>
                     <label>
                     CityName:
                         <input type="text" value={this.state.value} onChange={this.handleChange} />

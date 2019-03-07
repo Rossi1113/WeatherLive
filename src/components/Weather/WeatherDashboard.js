@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { CurrentWeatherDisplay } from './CurrentWeatherDisplay';
 import { DailyWeatherDisplay } from './DailyWeatherDisplay';
 import { HourlyWeatherDisplay } from './HourlyWeatherDisplay';
-import { SearchWeather } from './SearchWeather';
+
 
 // IMPORT PROJECT SERVICES
 import { WeatherService } from '../../services/WeatherService';
@@ -130,7 +130,6 @@ class WeatherDashboard extends Component {
                         <CurrentWeatherDisplay weather={this.state.weather} onRefresh={this.handleOnRefresh} />
                         <DailyWeatherDisplay dailyForecasts={this.state.dailyForecasts} />
                         <HourlyWeatherDisplay hourlyForecasts={this.state.hourlyForecasts} />
-                        <SearchWeather />
                     </div>
                 }
                 {

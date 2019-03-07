@@ -52,6 +52,7 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-owl-carousel2": "^0.2.1"
+    "react-owl-carousel2": "^0.2.1",
+    "react-weathericons": "^1.0.4"
   }
 }
