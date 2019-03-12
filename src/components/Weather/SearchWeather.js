@@ -1,4 +1,11 @@
+//import package reference
 import React, { Component } from 'react';
+
+//import project reference
+import { DailyWeatherDisplay } from './DailyWeatherDisplay';
+import { HourlyWeatherDisplay } from './HourlyWeatherDisplay';
+
+//import project services
 import { WeatherService } from '../../services/WeatherService';
 
 const weatherService = new WeatherService();
@@ -24,10 +31,47 @@ class SearchWeather extends Component {
         weatherService
             .getWeatherByCityName(this.state.value)
             .then(weather => {
+                const position = {
+                    latitude: weather.location.latitude,
+                    longitude:weather.location.longitude
+                };
+
+                this.loadDailyWeatherByPosition(position);
+                this.loadHourlyWeatherByPosition(position);
                 this.setState(() => ({weather: weather, showResult: true}));
+
             })
             .catch(error => console.log(error));
+
         e.preventDefault();
+    }
+
+    loadDailyWeatherByPosition(position) {
+
+        if (!position) {
+            throw Error('A valid position must be specified');
+        }
+
+        weatherService
+            .getDailyWeatherByPosition(position)
+            .then(dailyForecasts => {
+                this.setState(() => ({ dailyForecasts: dailyForecasts}));
+            })
+            .catch(error => console.log(error));
+    }
+
+    loadHourlyWeatherByPosition(position) {
+
+        if (!position) {
+            throw Error('A valid position must be specified');
+        }
+
+        weatherService
+            .getHourlyWeatherByPosition(position)
+            .then(hourlyForecasts => {
+                this.setState(() => ({ hourlyForecasts: hourlyForecasts }));
+            })
+            .catch(error => console.log(error));
     }
 
     render() {
@@ -55,6 +99,8 @@ class SearchWeather extends Component {
                                 <img className="weather-icon" src={this.state.weather.icon} />
                                 <span className="weather-description">{this.state.weather.condition}</span>
                             </div>
+                            <DailyWeatherDisplay dailyForecasts={this.state.dailyForecasts} />
+                            <HourlyWeatherDisplay hourlyForecasts={this.state.hourlyForecasts} />
                         </div>
                     </div>
                 }
