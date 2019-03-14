@@ -10,11 +10,13 @@ const getWeather = (url) => {
             .get(url)
             .then(response => {
                 if (response && response.status === 200) {
-                    const { main, icon } = response.data.weather[0];
+                    const { id, main, icon } = response.data.weather[0];
                     const { temp, temp_min, temp_max } = response.data.main;
                     const { lon, lat } = response.data.coord;
                     const { dt, name } = response.data;
+
                     resolve({
+                        id: 'wi wi-owm-' + id,
                         condition: main,
                         date: new Date(dt * 1000),
                         icon: `${OPEN_WEATHER_IMG_URL}/${icon}.png`,
@@ -55,6 +57,7 @@ const getDailyWeather = (url) => {
                         return {
                             condition: fc.weather[0].description,
                             date: new Date(fc.dt * 1000),
+                            id: 'wi wi-owm-' + fc.weather[0].id,
                             icon: `${OPEN_WEATHER_IMG_URL}/${fc.weather[0].icon}.png`,
                             location: location,
                             temperature: {
@@ -91,6 +94,7 @@ const getHourlyWeather = (url) => {
                         return {
                             condition: fc.weather[0].description,
                             date: new Date(fc.dt * 1000),
+                            id: 'wi wi-owm-' + fc.weather[0].id,
                             icon: `${OPEN_WEATHER_IMG_URL}/${fc.weather[0].icon}.png`,
                             location: location,
                             temperature: {
@@ -109,7 +113,6 @@ const getHourlyWeather = (url) => {
 };
 
 class WeatherService {
-
     getCurrentWeatherByPosition({latitude, longitude}) {
         if (!latitude) {
             throw Error('Latitude is required');

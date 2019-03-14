@@ -21,7 +21,7 @@ const getDate = (date) => {
 const DailyWeatherForecastCard = ({ forecast }) => (
     <div className="daily-weather-card">
         <small>{getDate(forecast.date)}</small>
-        <img className="icon mx-auto" src={forecast.icon} />
+        <i className={forecast.id}></i>
         <div className="font-weight-bold">
             {parseInt(forecast.temperature.maximum)}&deg;
             &nbsp;<small>{parseInt(forecast.temperature.minimum)}&deg;</small>

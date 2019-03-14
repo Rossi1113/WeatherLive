@@ -21,11 +21,11 @@ class DailyWeatherDisplay extends Component {
         super(props);
     }
 
-    
+
     render() {
         return (
             <div className="daily-weather-display">
-                <div className="text-center h5 pt-2">Daily</div>                
+                <div className="text-center h5 pt-2">Daily</div>
                 <div className="carousel">
                     <OwlCarousel ref={el => this.carousel = el} options={options}>
                         {

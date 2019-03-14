@@ -1,6 +1,7 @@
 //import package reference
 import React, { Component } from 'react';
 
+
 //import project reference
 import { DailyWeatherDisplay } from './DailyWeatherDisplay';
 import { HourlyWeatherDisplay } from './HourlyWeatherDisplay';
@@ -96,7 +97,7 @@ class SearchWeather extends Component {
                                 <span className="weather-temp">{parseInt(this.state.weather.temperature.current)} &deg;&nbsp;<sup>c</sup></span>
                             </div>
                             <div className="weather-condition">
-                                <img className="weather-icon" src={this.state.weather.icon} />
+                                <i className={this.state.weather.id}></i>
                                 <span className="weather-description">{this.state.weather.condition}</span>
                             </div>
                             <DailyWeatherDisplay dailyForecasts={this.state.dailyForecasts} />
