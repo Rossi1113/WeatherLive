@@ -6,7 +6,7 @@ import { SearchWeather } from './Weather/SearchWeather';
 
 const App = () => (
     <div>
-        <Header title='Weather' />
+        <Header title='WeatherLive' />
         <div className="mt-lg-5">
             <div className="col-lg-6 p-0 mx-auto">
                 <div className="container">

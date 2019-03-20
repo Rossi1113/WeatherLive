@@ -10,7 +10,7 @@ const getTime = (date) => {
 
 const HourlyWeatherForecastCard = ({ forecast }) => (
     <div className="hourly-weather-card">
-        <small>{getTime(forecast.date)}</small>
+        <div>{getTime(forecast.date)}</div>
         <i className={forecast.id}></i>
         <div className="font-weight-bold">
             {parseInt(forecast.temperature.current)}&deg;

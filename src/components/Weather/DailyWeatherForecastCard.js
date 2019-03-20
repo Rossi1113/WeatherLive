@@ -20,7 +20,7 @@ const getDate = (date) => {
 
 const DailyWeatherForecastCard = ({ forecast }) => (
     <div className="daily-weather-card">
-        <small>{getDate(forecast.date)}</small>
+        <div>{getDate(forecast.date)}</div>
         <i className={forecast.id}></i>
         <div className="font-weight-bold">
             {parseInt(forecast.temperature.maximum)}&deg;

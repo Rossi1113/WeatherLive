@@ -25,7 +25,7 @@ const CurrentWeatherDisplay = (props) => {
                 <span className="weather-description">{weather.condition}</span>
             </div>
             <div className="weather-update">Updated as of {getUpdateTime(weather.date)}</div>
-            <i className="refresh fa fa-refresh fa-3x" onClick={props.onRefresh}></i>
+            {/* <i className="refresh fa fa-refresh fa-3x" onClick={props.onRefresh}></i>*/}
         </div>
     );
 };

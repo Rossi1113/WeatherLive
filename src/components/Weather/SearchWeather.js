@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 
 
+
 //import project reference
 import { DailyWeatherDisplay } from './DailyWeatherDisplay';
 import { HourlyWeatherDisplay } from './HourlyWeatherDisplay';
@@ -17,7 +18,8 @@ class SearchWeather extends Component {
 
         this.state = {
             value: '',
-            showResult: false
+            showResult: false,
+            error: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -29,6 +31,12 @@ class SearchWeather extends Component {
     }
 
     handleSubmit(e) {
+        if(this.state.value == ''){
+            this.setState({error: true , showResult: false});
+            e.preventDefault();
+            return;
+
+        }
         weatherService
             .getWeatherByCityName(this.state.value)
             .then(weather => {
@@ -39,10 +47,14 @@ class SearchWeather extends Component {
 
                 this.loadDailyWeatherByPosition(position);
                 this.loadHourlyWeatherByPosition(position);
-                this.setState(() => ({weather: weather, showResult: true}));
+                this.setState(() => ({weather: weather, showResult: true , error: false}));
 
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+                console.log(error);
+                this.setState({error: true, showResult: false});
+            });
+
 
         e.preventDefault();
     }
@@ -80,12 +92,8 @@ class SearchWeather extends Component {
             <div>
 
                 <form onSubmit={this.handleSubmit}>
-                    <i>Search weather here</i>
-                    <label>
-                    CityName:
-                        <input type="text" value={this.state.value} onChange={this.handleChange} />
-                    </label>
-                    <input type="submit" value="Submit"/>
+                    <input type="text" placeholder="Search city here..." value={this.state.value} onChange={this.handleChange} />
+                    <input type="submit" value="Submit" className="btn btn-primary btn-sm"/>
                 </form>
                 {
                     this.state.showResult &&
@@ -94,7 +102,7 @@ class SearchWeather extends Component {
                             <div className="weather-location">{this.state.weather.location.name}</div>
                             <div className="weather-min-max-temp">{this.state.weather.temperature.maximum}&deg; | {this.state.weather.temperature.minimum}&deg;</div>
                             <div className="weather-current">
-                                <span className="weather-temp">{parseInt(this.state.weather.temperature.current)} &deg;&nbsp;<sup>c</sup></span>
+                                <span className="weather-temp" style={{fontSize:'xx-large'}}>{parseInt(this.state.weather.temperature.current)} &deg;&nbsp;<sup>c</sup></span>
                             </div>
                             <div className="weather-condition">
                                 <i className={this.state.weather.id}></i>
@@ -104,6 +112,11 @@ class SearchWeather extends Component {
                             <HourlyWeatherDisplay hourlyForecasts={this.state.hourlyForecasts} />
                         </div>
                     </div>
+                }
+
+                {
+                    this.state.error &&
+                    <p className="text-center">No valid city was found</p>
                 }
             </div>
         );
