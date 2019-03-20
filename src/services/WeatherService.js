@@ -53,7 +53,15 @@ const getDailyWeather = (url) => {
                         longitude: response.data.city.coord.lon
                     };
 
-                    const dailyForecasts = response.data.list.map(fc => {
+                    var time = new Date(response.data.list[0].dt * 1000).getHours();
+
+                    const validForecasts = response.data.list.filter(
+                        fc => {
+                            return new Date(fc.dt * 1000).getHours() == time;
+                        }
+                    );
+
+                    const dailyForecasts = validForecasts.map(fc => {
                         return {
                             condition: fc.weather[0].description,
                             date: new Date(fc.dt * 1000),
@@ -94,6 +102,7 @@ const getHourlyWeather = (url) => {
                         return {
                             condition: fc.weather[0].description,
                             date: new Date(fc.dt * 1000),
+
                             id: 'wi wi-owm-' + fc.weather[0].id,
                             icon: `${OPEN_WEATHER_IMG_URL}/${fc.weather[0].icon}.png`,
                             location: location,

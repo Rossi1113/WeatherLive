@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 
 
-
 //import project reference
 import { DailyWeatherDisplay } from './DailyWeatherDisplay';
 import { HourlyWeatherDisplay } from './HourlyWeatherDisplay';
@@ -18,7 +17,9 @@ class SearchWeather extends Component {
 
         this.state = {
             value: '',
-            showResult: false,
+            showCurrentWeather: false,
+            showDailyWeather: false,
+            showHourlyWeather: false,
             error: false
         };
 
@@ -32,7 +33,12 @@ class SearchWeather extends Component {
 
     handleSubmit(e) {
         if(this.state.value == ''){
-            this.setState({error: true , showResult: false});
+            this.setState({
+                error: true ,
+                showCurrentWeather: false,
+                showDailyWeather: false,
+                showHourlyWeather: false
+            });
             e.preventDefault();
             return;
 
@@ -47,7 +53,7 @@ class SearchWeather extends Component {
 
                 this.loadDailyWeatherByPosition(position);
                 this.loadHourlyWeatherByPosition(position);
-                this.setState(() => ({weather: weather, showResult: true , error: false}));
+                this.setState(() => ({weather: weather, showCurrentWeather: true , error: false}));
 
             })
             .catch(error => {
@@ -68,7 +74,7 @@ class SearchWeather extends Component {
         weatherService
             .getDailyWeatherByPosition(position)
             .then(dailyForecasts => {
-                this.setState(() => ({ dailyForecasts: dailyForecasts}));
+                this.setState(() => ({ dailyForecasts: dailyForecasts , showDailyWeather: true}));
             })
             .catch(error => console.log(error));
     }
@@ -82,9 +88,15 @@ class SearchWeather extends Component {
         weatherService
             .getHourlyWeatherByPosition(position)
             .then(hourlyForecasts => {
-                this.setState(() => ({ hourlyForecasts: hourlyForecasts }));
+                this.setState(() => ({ hourlyForecasts: hourlyForecasts , showHourlyWeather: true}));
             })
             .catch(error => console.log(error));
+    }
+
+    showWeather() {
+        return this.state.showCurrentWeather
+            && this.state.showDailyWeather
+            && this.state.showHourlyWeather;
     }
 
     render() {
@@ -96,9 +108,9 @@ class SearchWeather extends Component {
                     <input type="submit" value="Submit" className="btn btn-primary btn-sm"/>
                 </form>
                 {
-                    this.state.showResult &&
+                    this.showWeather() &&
                     <div>
-                        <div className="searched-city-weather" style={{position: 'relative'}}>
+                        <div className="searched-city-weather" style={{position: 'relative',background: '#ECEFF1'}}>
                             <div className="weather-location">{this.state.weather.location.name}</div>
                             <div className="weather-min-max-temp">{this.state.weather.temperature.maximum}&deg; | {this.state.weather.temperature.minimum}&deg;</div>
                             <div className="weather-current">
