@@ -58,7 +58,7 @@ class SearchWeather extends Component {
             })
             .catch(error => {
                 console.log(error);
-                this.setState({error: true, showResult: false});
+                this.setState({error: true, showCurrentWeather: false});
             });
 
 

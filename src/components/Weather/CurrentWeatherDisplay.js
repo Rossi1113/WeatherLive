@@ -18,7 +18,7 @@ const CurrentWeatherDisplay = (props) => {
             <div className="weather-location">{weather.location.name}</div>
             <div className="weather-min-max-temp">{weather.temperature.maximum}&deg; | {weather.temperature.minimum}&deg;</div>
             <div className="weather-current">
-                <span className="weather-temp">{parseInt(weather.temperature.current)} &deg;&nbsp;<sup>c</sup></span>
+                <span className="weather-temp">{parseInt(weather.temperature.current)} &deg;&nbsp;<sup>C</sup> | &deg;&nbsp;<sup>F</sup></span>
             </div>
             <div className="weather-condition">
                 <i className={weather.id}></i>
