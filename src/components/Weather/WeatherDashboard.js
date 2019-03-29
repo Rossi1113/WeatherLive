@@ -15,6 +15,13 @@ import { GeolocationService } from '../../services/GeolocationService';
 const weatherService = new WeatherService();
 const geolocationService = new GeolocationService();
 
+const CelciusToFahrenheit = (temperature) => {
+    return Math.round(temperature*9/5 + 32);
+};
+
+const FahrenheitToCelcius = (temperature) => {
+    return Math.round(temperature*5/9 - 32*5/9);
+};
 
 class WeatherDashboard extends Component {
 
@@ -24,7 +31,8 @@ class WeatherDashboard extends Component {
         this.state = {
             showCurrentWeather: false,
             showDailyWeather: false,
-            showHourlyWeather: false
+            showHourlyWeather: false,
+            showCelcuis: true
         };
 
         this.handleOnRefresh = this.handleOnRefresh.bind(this);
@@ -90,20 +98,78 @@ class WeatherDashboard extends Component {
 
 
     handleOnRefresh() {
-        this.setState(() => ({
-            showCurrentWeather: false,
-            showDailyWeather: false,
-            showHourlyWeather: false
-        }));
+        let newWeather = Object.assign({}, this.state.weather);
+        if(this.state.showCelcuis){
+            newWeather.temperature.current = CelciusToFahrenheit(this.state.weather.temperature.current);
+            newWeather.temperature.minimum = CelciusToFahrenheit(this.state.weather.temperature.minimum);
+            newWeather.temperature.maximum = CelciusToFahrenheit(this.state.weather.temperature.maximum);
 
-        geolocationService
-            .getCurrentPosition()
-            .then(position => {
-                this.loadCurrentWeatherByPosition(position);
-                this.loadDailyWeatherByPosition(position);
-                this.loadHourlyWeatherByPosition(position);
-            })
-            .catch(error => console.log(error));
+        } else {
+            newWeather.temperature.current = FahrenheitToCelcius(this.state.weather.temperature.current);
+            newWeather.temperature.minimum = FahrenheitToCelcius(this.state.weather.temperature.minimum);
+            newWeather.temperature.maximum = FahrenheitToCelcius(this.state.weather.temperature.maximum);
+        }
+        const newDaily = this.state.dailyForecasts.map( fc => {
+            if(this.state.showCelcuis){
+                return{
+                    condition: fc.condition,
+                    date: fc.date,
+                    id: fc.id,
+                    icon: fc.icon,
+                    location: fc.location,
+                    temperature: {
+                        minimum: CelciusToFahrenheit(fc.temperature.minimum),
+                        maximum: CelciusToFahrenheit(fc.temperature.maximum)
+                    }
+                };
+            } else {
+                return{
+                    condition: fc.condition,
+                    date: fc.date,
+                    id: fc.id,
+                    icon: fc.icon,
+                    location: fc.location,
+                    temperature: {
+                        minimum: FahrenheitToCelcius(fc.temperature.minimum),
+                        maximum: FahrenheitToCelcius(fc.temperature.maximum)
+                    }
+                };
+            }
+        });
+
+        const newHourly = this.state.hourlyForecasts.map( fc => {
+            if(this.state.showCelcuis){
+                return{
+                    condition: fc.condition,
+                    date: fc.date,
+                    id: fc.id,
+                    icon: fc.icon,
+                    location: fc.location,
+                    temperature: {
+                        current: CelciusToFahrenheit(fc.temperature.current)
+                    }
+                };
+            } else {
+                return{
+                    condition: fc.condition,
+                    date: fc.date,
+                    id: fc.id,
+                    icon: fc.icon,
+                    location: fc.location,
+                    temperature: {
+                        current: FahrenheitToCelcius(fc.temperature.current)
+                    }
+                };
+            }
+        });
+
+
+        this.setState(()=>({
+            weather:newWeather,
+            dailyForecasts:newDaily,
+            hourlyForecasts:newHourly,
+            showCelcuis:!this.state.showCelcuis
+        }));
     }
 
 
@@ -127,7 +193,7 @@ class WeatherDashboard extends Component {
                 {
                     this.showWeather() &&
                     <div>
-                        <CurrentWeatherDisplay weather={this.state.weather} onRefresh={this.handleOnRefresh} />
+                        <CurrentWeatherDisplay weather={this.state.weather} onRefresh={this.handleOnRefresh} units={this.state.showCelcuis} />
                         <DailyWeatherDisplay dailyForecasts={this.state.dailyForecasts} />
                         <HourlyWeatherDisplay hourlyForecasts={this.state.hourlyForecasts} />
                     </div>

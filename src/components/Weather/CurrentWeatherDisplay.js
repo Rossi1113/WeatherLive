@@ -12,19 +12,22 @@ const getUpdateTime = (date) => {
 const CurrentWeatherDisplay = (props) => {
 
     const { weather } = props;
+    const { units } = props;
 
     return (
         <div className="current-weather-display" style={{position: 'relative'}}>
             <div className="weather-location">{weather.location.name}</div>
             <div className="weather-min-max-temp">{weather.temperature.maximum}&deg; | {weather.temperature.minimum}&deg;</div>
             <div className="weather-current">
-                <span className="weather-temp">{parseInt(weather.temperature.current)} &deg;&nbsp;<sup>C</sup> | &deg;&nbsp;<sup>F</sup></span>
+                {units && (<span className="weather-temp">{parseInt(weather.temperature.current)} &deg;&nbsp;<sup>C</sup></span>)}
+                {!units && (<span className="weather-temp">{parseInt(weather.temperature.current)} &deg;&nbsp;<sup>F</sup></span>)}
             </div>
             <div className="weather-condition">
                 <i className={weather.id}></i>
                 <span className="weather-description">{weather.condition}</span>
             </div>
             <div className="weather-update">Updated as of {getUpdateTime(weather.date)}</div>
+            <i className="refresh fa fa-refresh " onClick={props.onRefresh}></i>
             {/* <i className="refresh fa fa-refresh fa-3x" onClick={props.onRefresh}></i>*/}
         </div>
     );
@@ -33,7 +36,8 @@ const CurrentWeatherDisplay = (props) => {
 
 CurrentWeatherDisplay.propTypes = {
     onRefresh: PropTypes.func.isRequired,
-    weather: PropTypes.object.isRequired
+    weather: PropTypes.object.isRequired,
+    units: PropTypes.bool.isRequired
 };
 
 
